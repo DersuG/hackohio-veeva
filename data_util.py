@@ -21,3 +21,9 @@ def get_column_sum(df_data, c='TRx_Month_1'):
     #print(f'{sum = }')
     return sum
 
+def state_total_trx (s) :
+    total_trx = 0
+    for index, row in df.iterrows():
+        if row['State'] == s :
+            total_trx += sum_trx(row)
+    return total_trx
