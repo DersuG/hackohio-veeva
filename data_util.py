@@ -20,3 +20,4 @@ def get_column_sum(df_data, c='TRx_Month_1'):
         sum += df_row[c]
     #print(f'{sum = }')
     return sum
+
