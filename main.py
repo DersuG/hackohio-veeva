@@ -78,11 +78,11 @@ if __name__ == '__main__':
 
 
 
-    chart_data = pd.DataFrame(columns=['month', 'product', 'total_trx'])
+    df_chart_data = pd.DataFrame(columns=['month', 'product', 'total_trx'])
     for month in ['TRx_Month_1', 'TRx_Month_2', 'TRx_Month_3', 'TRx_Month_4', 'TRx_Month_5', 'TRx_Month_6']:
         for p in product_names:
             sum = get_column_sum(df_data[df_data['Product'] == p], month)
-            chart_data = chart_data.append(
+            df_chart_data = df_chart_data.append(
                 {
                     'month': month,
                     'product': p,
@@ -90,7 +90,8 @@ if __name__ == '__main__':
                 },
                 ignore_index=True
             )
-    chart = altair.Chart(chart_data).mark_bar().encode(
+
+    chart = altair.Chart(df_chart_data).mark_line(point=True).encode(
         x='month',
         y='total_trx',
         color='product'
@@ -100,10 +101,44 @@ if __name__ == '__main__':
         use_container_width=True
     )
 
+    # chart = altair.Chart(df_chart_data).mark_bar().encode(
+    #     x='month',
+    #     y='total_trx',
+    #     color='product'
+    # )
+    # st.altair_chart(
+    #     chart,
+    #     use_container_width=True
+    # )
 
 
+    # st.vega_lite_chart(
+    #     chart_data,
+    #     {
+    #         'mark': {'type': 'bar', 'tooltip': True},
+    #         'encoding': {
+    #             'x': {
+    #                 'field': 'month',
+    #                 'type': 'ordinal',
+    #                 'title': 'Month'
+    #             },
+    #             'y': {
+    #                 'field': 'total_trx',
+    #                 'aggregate': 'sum',
+    #                 'stack': None,
+    #                 'title': 'Total Monthly TRx'
+    #             },
+    #             'color': {
+    #                 'field': 'product',
+    #                 'title': 'Product'
+    #             },
+    #             "opacity": {"value": 0.7}
+    #         }
+    #     }
+    # )
 
     
     
 
 
+# Need bar chart showing doctor name, number of prescriptions, etc.
