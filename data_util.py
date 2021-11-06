@@ -27,3 +27,17 @@ def state_total_trx (s) :
         if row['State'] == s :
             total_trx += sum_trx(row)
     return total_trx
+
+def product_total_trx (p):
+    total_trx = 0
+    for index, row in df.iterrows():
+        if row['Product'] == p :
+            total_trx += sum_trx(row)
+    return total_trx
+
+def state_total_trx_product (s, p):
+    total_trx = 0
+    for index, row in df.iterrows():
+        if row['State'] == s and row['Product'] == p:
+            total_trx += sum_trx(row)
+    return total_trx
