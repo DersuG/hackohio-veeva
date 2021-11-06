@@ -7,6 +7,7 @@ from data_util import * # Lmao
 df_data = pd.read_csv('Prescriber_Data.csv')
 
 # Lets get some statistics:
+# comment lol
 
 
 # If this is the file executed, run the following:
