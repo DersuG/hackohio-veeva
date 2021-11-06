@@ -20,4 +20,4 @@ The basic commands are:
 
 Sometimes, a file has multiple changes which needs to be merged before they can be pushed. I'll add more detail to this later, but the general idea is you'll need to open the file, find where the changes are (they'll be marked with something like "======>" at the top and some weird numbers at the bottom). It's up to you how to combine the changes. Once you're done, recommit and push.
 
-And finally, always remember: Always pull before you push!
+And finally, always remember: *Always pull before you push!*
