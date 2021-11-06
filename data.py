@@ -56,3 +56,35 @@ def get_monthly_minmax_trx(df_data, c='TRx_Month_1'):
     print(f'{max_monthly_trx = } ({max_monthly_trx_id = })')
     print(f'{min_monthly_trx = } ({min_monthly_trx_id = })')
 
+#Displays global prescription totals per month in metric and line graph
+def TRxByProduct(data):
+    start = 0 
+    TRx1 = 0 
+    TRx2 = 0
+    TRx3 = 0
+    TRx4 = 0
+    TRx5 = 0
+    TRx6 = 0
+    productsData = pd.DataFrame()
+    for x in range(len(data.index)):
+        if(x>0):
+            if(data.iloc[x,4] != data.iloc[x-1,4]):
+                dataProduct = data.iloc[start:x,:]
+                for index, row in dataProduct.iterrows():
+                    TRx1+=row['TRx_Month_1']
+                    TRx2+=row['TRx_Month_2']
+                    TRx3+=row['TRx_Month_3']
+                    TRx4+=row['TRx_Month_4']
+                    TRx5+=row['TRx_Month_5']
+                    TRx6+=row['TRx_Month_6']
+                sl.header('Total Global Prescriptions for '+dataProduct.iloc[0,4])
+                col1,col2,col3,col4,col5,col6 = sl.columns(6)
+                col1.metric('Month 1',TRx1)
+                col2.metric('Month 2',TRx2,TRx2-TRx1)
+                col3.metric('Month 3',TRx3,TRx3-TRx2)
+                col4.metric('Month 4',TRx4,TRx4-TRx3)
+                col5.metric('Month 5',TRx5,TRx5-TRx4)
+                col6.metric('Month 6',TRx6,TRx6-TRx5)
+                productsData = pd.concat([productsData,pd.DataFrame({dataProduct.iloc[0,4]:[TRx1,TRx2,TRx3,TRx4,TRx5,TRx6]})],axis=1)
+                start = x
+    sl.line_chart(productsData)
