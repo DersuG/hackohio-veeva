@@ -1,3 +1,4 @@
+import altair
 import streamlit as st
 import pandas as pd
 from data import * # Lmao
@@ -55,25 +56,54 @@ if __name__ == '__main__':
     # print(f'Month 6 total TRx: {get_column_sum(df_data, "TRx_Month_6")}')
 
     # Get a list of product names:
-    products = []
+    product_names = []
     for p in df_data['Product']:
-        if p not in products:
-            products.append(p)
+        if p not in product_names:
+            product_names.append(p)
 
-    d = {}
-    for p in products:
-        d[p] = get_monthly_total_product_TRx(df_data, p)
-    print(f'{d}')
+    product_monthly_trx = []
+    for p in product_names:
+        # product_monthly_trx.append(get_monthly_total_product_TRx(df_data, p))
+        d = []
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'TRx_Month_1'))
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'TRx_Month_2'))
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'TRx_Month_3'))
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'TRx_Month_4'))
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'TRx_Month_5'))
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'TRx_Month_6'))
+        product_monthly_trx.append(d)
+
+    print(f'{product_names = }')
+    print(f'{product_monthly_trx = }')
 
 
-    st.vega_lite_chart(d, {
-        'mark': {'type': 'bar', 'tooltip': True},
-        'encoding': {
-            'x': {'field': 'Month', 'type': 'quantitative'},
-            'y': {'field': 'Total TRx', 'type': 'quantitative'},
-        },
-    })
 
+    chart_data = pd.DataFrame(columns=['month', 'product', 'total_trx'])
+    for month in ['TRx_Month_1', 'TRx_Month_2', 'TRx_Month_3', 'TRx_Month_4', 'TRx_Month_5', 'TRx_Month_6']:
+        for p in product_names:
+            sum = get_column_sum(df_data[df_data['Product'] == p], month)
+            chart_data = chart_data.append(
+                {
+                    'month': month,
+                    'product': p,
+                    'total_trx': sum
+                },
+                ignore_index=True
+            )
+    chart = altair.Chart(chart_data).mark_bar().encode(
+        x='month',
+        y='total_trx',
+        color='product'
+    )
+    st.altair_chart(
+        chart,
+        use_container_width=True
+    )
+
+
+
+
+    
     
 
 
