@@ -9,6 +9,7 @@ from data_util import * # Lmao
 df_data = pd.read_csv('Prescriber_Data.csv')
 
 # Lets get some statistics:
+# comment lol
 
 
 def get_monthly_total_product_TRx(df_data, product='Cholecap'):
