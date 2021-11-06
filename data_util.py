@@ -21,23 +21,23 @@ def get_column_sum(df_data, c='TRx_Month_1'):
     #print(f'{sum = }')
     return sum
 
-def state_total_trx (s) :
+def state_total_trx (df_data, s) :
     total_trx = 0
-    for index, row in df.iterrows():
+    for index, row in df_data.iterrows():
         if row['State'] == s :
             total_trx += sum_trx(row)
     return total_trx
 
-def product_total_trx (p):
+def product_total_trx (df_data, p):
     total_trx = 0
-    for index, row in df.iterrows():
+    for index, row in df_data.iterrows():
         if row['Product'] == p :
             total_trx += sum_trx(row)
     return total_trx
 
-def state_total_trx_product (s, p):
+def state_total_trx_product (df_data, s, p):
     total_trx = 0
-    for index, row in df.iterrows():
+    for index, row in df_data.iterrows():
         if row['State'] == s and row['Product'] == p:
             total_trx += sum_trx(row)
     return total_trx
