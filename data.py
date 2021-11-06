@@ -1,4 +1,4 @@
-#import streamlit as sl
+import streamlit as sl
 import pandas as pd
 
 
@@ -55,3 +55,4 @@ def get_monthly_minmax_trx(df_data, c='TRx_Month_1'):
 
     print(f'{max_monthly_trx = } ({max_monthly_trx_id = })')
     print(f'{min_monthly_trx = } ({min_monthly_trx_id = })')
+
