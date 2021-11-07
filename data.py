@@ -39,6 +39,29 @@ def get_total_minmax_trx(df_data):
     print(f'{max_trx = } ({max_trx_id = })')
     print(f'{min_trx = } ({min_trx_id = })')
 
+def get_total_minmax_nrx(df_data):
+    #print('[r] get_total_minmax_nrx()')
+
+    max_nrx = sum_nrx(df_data.iloc[0, :]) # First row.
+    max_nrx_id = 0
+    min_nrx = sum_nrx(df_data.iloc[-1, :]) # Last row.
+    min_nrx_id = 0
+
+    for _, df_row in df_data.iterrows():
+        total_nrx = sum_nrx(df_row)
+
+        if total_nrx > max_nrx:
+            max_nrx = total_nrx
+            max_nrx_id = df_row['id']
+        if total_nrx < min_nrx:
+            min_nrx = total_nrx
+            min_nrx_id = df_row['id']
+
+        #print(f'Total NRx: {total_nrx}, id = {df_row["id"]}')
+
+    print(f'{max_nrx = } ({max_nrx_id = })')
+    print(f'{min_nrx = } ({min_nrx_id = })')
+
 def get_monthly_minmax_trx(df_data, c='TRx_Month_1'):
     #print('\n[r] get_monthly_minmax_trx()')
 
@@ -58,6 +81,26 @@ def get_monthly_minmax_trx(df_data, c='TRx_Month_1'):
 
     print(f'{max_monthly_trx = } ({max_monthly_trx_id = })')
     print(f'{min_monthly_trx = } ({min_monthly_trx_id = })')
+
+def get_monthly_minmax_nrx(df_data, c='NRx_Month_1'):
+    #print('\n[r] get_monthly_minmax_trx()')
+
+    max_monthly_nrx = df_data.iloc[0, :][c]
+    max_monthly_nrx_id = 0
+    min_monthly_nrx = df_data.iloc[-1, :][c]
+    min_monthly_nrx_id = 0
+
+    for _, df_row in df_data[['id', c]].iterrows():
+
+        if df_row[c] > max_monthly_nrx:
+            max_monthly_nrx = df_row[c]
+            max_monthly_nrx_id = df_row['id']
+        if df_row[c] < min_monthly_nrx:
+            min_monthly_nrx = df_row[c]
+            min_monthly_nrx_id = df_row['id']
+
+    print(f'{max_monthly_nrx = } ({max_monthly_nrx_id = })')
+    print(f'{min_monthly_nrx = } ({min_monthly_nrx_id = })')
 
 #Displays global prescription totals per month in metric and line graph
 def TRxByProduct(data):
@@ -179,3 +222,50 @@ def show_monthly_trx_by_product(df_data):
     #         }
     #     }
     # )
+
+def show_monthly_nrx_by_product(df_data):
+    # Get a list of product names:
+    product_names = []
+    for p in df_data['Product']:
+        if p not in product_names:
+            product_names.append(p)
+
+    product_monthly_trx = []
+    for p in product_names:
+        # product_monthly_trx.append(get_monthly_total_product_TRx(df_data, p))
+        d = []
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'NRx_Month_1'))
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'NRx_Month_2'))
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'NRx_Month_3'))
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'NRx_Month_4'))
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'NRx_Month_5'))
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'NRx_Month_6'))
+        product_monthly_trx.append(d)
+
+    print(f'{product_names = }')
+    print(f'{product_monthly_trx = }')
+
+
+
+    df_chart_data = pd.DataFrame(columns=['month', 'product', 'total_nrx'])
+    for month in ['NRx_Month_1', 'NRx_Month_2', 'NRx_Month_3', 'NRx_Month_4', 'NRx_Month_5', 'NRx_Month_6']:
+        for p in product_names:
+            sum = get_column_sum(df_data[df_data['Product'] == p], month)
+            df_chart_data = df_chart_data.append(
+                {
+                    'month': month,
+                    'product': p,
+                    'total_nrx': sum
+                },
+                ignore_index=True
+            )
+
+    chart = altair.Chart(df_chart_data).mark_line(point=True).encode(
+        x='month',
+        y='total_nrx',
+        color='product'
+    )
+    st.altair_chart(
+        chart,
+        use_container_width=True
+    )

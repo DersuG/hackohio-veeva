@@ -39,6 +39,7 @@ if __name__ == '__main__':
     get_monthly_minmax_trx(df_data, 'TRx_Month_5')
     get_monthly_minmax_trx(df_data, 'TRx_Month_6')
 
+    show_monthly_nrx_by_product(df_data)
     show_monthly_trx_by_product(df_data)
     
     

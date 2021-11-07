@@ -21,6 +21,22 @@ def get_column_sum(df_data, c='TRx_Month_1'):
     #print(f'{sum = }')
     return sum
 
+def get_column_average(df_data, c='TRx_Month_1'):
+    """
+    Calculates the average of a DataFrame column.
+
+    Parameters:
+    :param DataFrame df_data: The dataframe.
+    :string c: The name of the column.
+    
+    Returns:
+    :number avg: The average of the column.  
+    """
+
+    sum = get_column_sum(df_data, c)
+    avg = sum / len(df_data.index)
+    return avg
+
 def state_total_trx (df_data, s) :
     total_trx = 0
     for index, row in df_data.iterrows():
