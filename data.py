@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import altair as altair
 import streamlit as st
 import pandas as pd
@@ -218,7 +217,7 @@ def show_monthly_trx_by_product(df_data):
     #         }
     #     }
     # )
-    
+
 import altair as altair
 import streamlit as st
 import pandas as pd
