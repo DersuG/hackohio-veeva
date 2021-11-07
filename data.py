@@ -134,38 +134,6 @@ def top_doctors_by_productTRx(df_data, p):
                         break
     df_doctors = pd.DataFrame({"Doctor": doctors, "Total TRx": trx})
     return df_doctors
-
-def top_doctors_by_productNRx(df_data, p):
-    doctors = []
-    nrx = []
-    switch = 0
-    for index, row in df.iterrows():
-        if p == "All":
-            switch = 1
-        if row['Product'] == p or switch == 1:
-            total_nrx = sum_nrx(row)
-            if (len(doctors) == 0):
-                doctors.append(row['first_name'] + ' ' + row['last_name'])
-                nrx.append(total_nrx)
-            elif (len(doctors) < 10 and len(doctors) != 0):
-                for i in range(len(doctors)):
-                    if total_nrx > nrx[i]:
-                        doctors.insert(i, row['first_name'] + ' ' + row['last_name'])
-                        nrx.insert(i, total_nrx)
-                        break
-                    else:
-                        doctors.append(row['first_name'] + ' ' + row['last_name'])
-                        nrx.append(total_nrx)
-            elif (len(doctors) >= 10):
-                for i in range(len(doctors)):
-                    if total_nrx > nrx[i]:
-                        doctors.insert(i, row['first_name'] + ' ' + row['last_name'])
-                        nrx.insert(i, total_nrx)
-                        del doctors[-1]
-                        del nrx[-1]
-                        break
-    df_doctors = pd.DataFrame({"Doctor": doctors, "Total NRx": nrx})
-    return df_doctors
     
 def show_monthly_trx_by_product(df_data):
     # Get a list of product names:
@@ -367,7 +335,7 @@ def TRxByProduct(data):
     st.header('Total Global Prescriptions')
     for x in range(len(data.index)):
         if(x>0):
-            if(data.iloc[x,4] != data.iloc[x-1,4]):
+            if(data.iloc[x,4] != data.iloc[x-1,4] or x==len(data)-1):
                 dataProduct = data.iloc[start:x,:]
                 for index, row in dataProduct.iterrows():
                     TRx1+=row['TRx_Month_1']
