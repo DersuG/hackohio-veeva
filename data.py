@@ -106,7 +106,7 @@ def create_product_totalTRx_Graph(products):
     fig.update_yaxes(title_text="Total Number of Prescriptions")
     st.plotly_chart(fig)
 
-def top_doctors_by_productNRx(df_data, p):
+def top_doctors_by_productTRx(df_data, p):
     doctors = []
     trx = []
     for index, row in df.iterrows():
@@ -226,15 +226,15 @@ from data_util import *
 
 
 
-def sum_trx(df_row):
-    total_trx = 0
-    total_trx += df_row['TRx_Month_1']
-    total_trx += df_row['TRx_Month_2']
-    total_trx += df_row['TRx_Month_3']
-    total_trx += df_row['TRx_Month_4']
-    total_trx += df_row['TRx_Month_5']
-    total_trx += df_row['TRx_Month_6']
-    return total_trx
+def sum_nrx(df_row):
+    total_nrx = 0
+    total_nrx += df_row['NRx_Month_1']
+    total_nrx += df_row['NRx_Month_2']
+    total_nrx += df_row['NRx_Month_3']
+    total_nrx += df_row['NRx_Month_4']
+    total_nrx += df_row['NRx_Month_5']
+    total_nrx += df_row['NRx_Month_6']
+    return total_nrx
 
 def get_total_minmax_trx(df_data):
     #print('[r] get_total_minmax_trx()')
