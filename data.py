@@ -1,5 +1,8 @@
+import altair as altair
 import streamlit as st
 import pandas as pd
+
+from data_util import *
 
 
 
@@ -131,3 +134,86 @@ def top_doctors_by_productNRx(df_data, p):
                         break
     df_doctors = pd.DataFrame({"Doctor": doctors, "Total TRx": trx})
     return df_doctors
+    
+def show_monthly_trx_by_product(df_data):
+    # Get a list of product names:
+    product_names = []
+    for p in df_data['Product']:
+        if p not in product_names:
+            product_names.append(p)
+
+    product_monthly_trx = []
+    for p in product_names:
+        # product_monthly_trx.append(get_monthly_total_product_TRx(df_data, p))
+        d = []
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'TRx_Month_1'))
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'TRx_Month_2'))
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'TRx_Month_3'))
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'TRx_Month_4'))
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'TRx_Month_5'))
+        d.append(get_column_sum(df_data[df_data['Product'] == p], 'TRx_Month_6'))
+        product_monthly_trx.append(d)
+
+    print(f'{product_names = }')
+    print(f'{product_monthly_trx = }')
+
+
+
+    df_chart_data = pd.DataFrame(columns=['month', 'product', 'total_trx'])
+    for month in ['TRx_Month_1', 'TRx_Month_2', 'TRx_Month_3', 'TRx_Month_4', 'TRx_Month_5', 'TRx_Month_6']:
+        for p in product_names:
+            sum = get_column_sum(df_data[df_data['Product'] == p], month)
+            df_chart_data = df_chart_data.append(
+                {
+                    'month': month,
+                    'product': p,
+                    'total_trx': sum
+                },
+                ignore_index=True
+            )
+
+    chart = altair.Chart(df_chart_data).mark_line(point=True).encode(
+        x='month',
+        y='total_trx',
+        color='product'
+    )
+    st.altair_chart(
+        chart,
+        use_container_width=True
+    )
+
+    # chart = altair.Chart(df_chart_data).mark_bar().encode(
+    #     x='month',
+    #     y='total_trx',
+    #     color='product'
+    # )
+    # st.altair_chart(
+    #     chart,
+    #     use_container_width=True
+    # )
+
+
+    # st.vega_lite_chart(
+    #     chart_data,
+    #     {
+    #         'mark': {'type': 'bar', 'tooltip': True},
+    #         'encoding': {
+    #             'x': {
+    #                 'field': 'month',
+    #                 'type': 'ordinal',
+    #                 'title': 'Month'
+    #             },
+    #             'y': {
+    #                 'field': 'total_trx',
+    #                 'aggregate': 'sum',
+    #                 'stack': None,
+    #                 'title': 'Total Monthly TRx'
+    #             },
+    #             'color': {
+    #                 'field': 'product',
+    #                 'title': 'Product'
+    #             },
+    #             "opacity": {"value": 0.7}
+    #         }
+    #     }
+    # )
