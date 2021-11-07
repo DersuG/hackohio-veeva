@@ -1,6 +1,8 @@
 import altair as altair
+from altair import datasets
 import streamlit as st
 import pandas as pd
+# from bokeh.plotting import figure
 
 from data_util import *
 
@@ -15,6 +17,16 @@ def sum_trx(df_row):
     total_trx += df_row['TRx_Month_5']
     total_trx += df_row['TRx_Month_6']
     return total_trx
+
+def sum_nrx(df_row):
+    total_nrx = 0
+    total_nrx += df_row['NRx_Month_1']
+    total_nrx += df_row['NRx_Month_2']
+    total_nrx += df_row['NRx_Month_3']
+    total_nrx += df_row['NRx_Month_4']
+    total_nrx += df_row['NRx_Month_5']
+    total_nrx += df_row['NRx_Month_6']
+    return total_nrx
 
 def get_total_minmax_trx(df_data):
     #print('[r] get_total_minmax_trx()')
@@ -489,3 +501,53 @@ def show_monthly_nrx_by_product(df_data):
         chart,
         use_container_width=True
     )
+
+
+# def show_state_total_trx(df_data):
+
+#     states = []
+#     for state in df_data['State']:
+#         if state not in states:
+#             states.append(state)
+
+#     total_trx = []
+#     for state in states:
+#         sum = 0
+#         sum += get_column_sum(df_data[df_data['State'] == state], 'TRx_Month_1')
+#         sum += get_column_sum(df_data[df_data['State'] == state], 'TRx_Month_2')
+#         sum += get_column_sum(df_data[df_data['State'] == state], 'TRx_Month_3')
+#         sum += get_column_sum(df_data[df_data['State'] == state], 'TRx_Month_4')
+#         sum += get_column_sum(df_data[df_data['State'] == state], 'TRx_Month_5')
+#         sum += get_column_sum(df_data[df_data['State'] == state], 'TRx_Month_6')
+#         total_trx.append(sum)
+
+#     print(f'{states = }')
+#     print(f'{total_trx = }')
+
+#     df_chart_data = pd.DataFrame(columns=['state', 'total_trx'])
+#     for state in states:
+#         df_chart_data = df_chart_data.append(
+#             {
+#                 'state': state,
+#                 'total_trx': total_trx
+#             },
+#             ignore_index=True
+#         )
+
+#     map_data = altair.topo_feature(data)
+
+#     chart = altair.Chart(df_chart_data).mark_geoshape().encode(
+#         shape='state:G',
+#         color='total_trx:Q',
+#         tooltip=['state:N', 'total_trx:Q']
+#     ).transform_lookup(
+#         lookup='id',
+#         from_=altair.LookupData(data=states, key='id'),
+#         as_='state'
+#     ).project(
+#         type='albersUsa'
+#     )
+#     st.altair_chart(
+#         chart,
+#         use_container_width=True
+#     )

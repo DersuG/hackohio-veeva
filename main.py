@@ -42,7 +42,8 @@ if __name__ == '__main__':
     show_monthly_nrx_by_product(df_data)
     show_monthly_trx_by_product(df_data)
     
-    
+    #print(df_data[df_data['State'] == 'Ohio'])
 
+    #show_state_total_trx(df_data)
 
 # Need bar chart showing doctor name, number of prescriptions, etc.
