@@ -347,7 +347,7 @@ def TRxByProduct(data):
     st.header('Total Global Prescriptions')
     for x in range(len(data.index)):
         if(x>0):
-            if(data.iloc[x,4] != data.iloc[x-1,4]):
+            if(data.iloc[x,4] != data.iloc[x-1,4] or x==len(data)-1):
                 dataProduct = data.iloc[start:x,:]
                 for index, row in dataProduct.iterrows():
                     TRx1+=row['TRx_Month_1']
