@@ -93,3 +93,41 @@ def TRxByProduct(data):
                 start = x
     if productsData.size>0:   
         st.line_chart(productsData)
+
+def create_product_totalTRx_Graph(products):
+    data = []
+    for p in products:
+        data.append(product_total_trx(p))
+    fig = go.Figure([go.Bar(x=products, y=data)])
+    fig.update_xaxes(title_text="Product")
+    fig.update_yaxes(title_text="Total Number of Prescriptions")
+    st.plotly_chart(fig)
+
+def top_doctors_by_productNRx(df_data, p):
+    doctors = []
+    trx = []
+    for index, row in df.iterrows():
+        if row['Product'] == p :
+            total_trx = sum_trx(row)
+            if (len(doctors) == 0):
+                doctors.append(row['first_name'] + ' ' + row['last_name'])
+                trx.append(total_trx)
+            elif (len(doctors) < 10 and len(doctors) != 0):
+                for i in range(len(doctors)):
+                    if total_trx > trx[i]:
+                        doctors.insert(i, row['first_name'] + ' ' + row['last_name'])
+                        trx.insert(i, total_trx)
+                        break
+                    else:
+                        doctors.append(row['first_name'] + ' ' + row['last_name'])
+                        trx.append(total_trx)
+            elif (len(doctors) >= 10):
+                for i in range(len(doctors)):
+                    if total_trx > trx[i]:
+                        doctors.insert(i, row['first_name'] + ' ' + row['last_name'])
+                        trx.insert(i, total_trx)
+                        del doctors[-1]
+                        del trx[-1]
+                        break
+    df_doctors = pd.DataFrame({"Doctor": doctors, "Total TRx": trx})
+    return df_doctors
